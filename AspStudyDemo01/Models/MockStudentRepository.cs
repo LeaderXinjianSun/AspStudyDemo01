@@ -12,10 +12,17 @@ namespace AspStudyDemo01.Models
         {
             _students = new List<Student>()
             {
-                new Student(){ Id = 1,Name = "张三",ClassName = "一年级",Email = "Tony_zhang@52abp.com" },
-                new Student(){ Id = 2,Name = "李四",ClassName = "二年级",Email = "Lisi@52abp.com" },
-                new Student(){ Id = 3,Name = "王二麻子",ClassName = "二年级",Email = "Wanger@52abp.com" }
+                new Student(){ Id = 1,Name = "张三",ClassName = ClassNameEnum.FirstGrade,Email = "Tony_zhang@52abp.com" },
+                new Student(){ Id = 2,Name = "李四",ClassName = ClassNameEnum.SecondGrade,Email = "Lisi@52abp.com" },
+                new Student(){ Id = 3,Name = "王二麻子",ClassName = ClassNameEnum.SecondGrade,Email = "Wanger@52abp.com" }
             };
+        }
+
+        public Student Add(Student student)
+        {
+            student.Id = _students.Max(s => s.Id) + 1;
+            _students.Add(student);
+            return student;
         }
 
         public IEnumerable<Student> GetAllStudents()

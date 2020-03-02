@@ -47,5 +47,16 @@ namespace AspStudyDemo01.Controllers
 
             return View(homeDetailsViewModel);
         }
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public RedirectToActionResult Create(Student student)
+        {
+            Student newStudent = _studentRepository.Add(student);
+            return RedirectToAction("Details",new { id = newStudent.Id} );
+        }
     }
 }
