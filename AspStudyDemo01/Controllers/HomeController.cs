@@ -53,10 +53,18 @@ namespace AspStudyDemo01.Controllers
             return View();
         }
         [HttpPost]
-        public RedirectToActionResult Create(Student student)
+        public IActionResult Create(Student student)
         {
-            Student newStudent = _studentRepository.Add(student);
-            return RedirectToAction("Details",new { id = newStudent.Id} );
+            if (ModelState.IsValid)
+            {
+                Student newStudent = _studentRepository.Add(student);
+                return RedirectToAction("Details", new { id = newStudent.Id });
+            }
+
+            return View();
+
+
+
         }
     }
 }
