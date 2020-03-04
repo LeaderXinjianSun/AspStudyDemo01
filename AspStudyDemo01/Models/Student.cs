@@ -19,5 +19,6 @@ namespace AspStudyDemo01.Models
             ErrorMessage ="邮箱的格式不正确")]
         [Required(ErrorMessage ="请输入邮件")]
         public string Email { get; set; }
+        public string PhotoPath { set; get; }
     }
 }

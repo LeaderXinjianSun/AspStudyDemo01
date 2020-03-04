@@ -34,5 +34,25 @@ namespace AspStudyDemo01.Models
         {
             return _students.FirstOrDefault(a => a.Id == id);
         }
+        public Student Delete(int id)
+        {
+            Student student = _students.FirstOrDefault(s=>s.Id == id);
+            if (student !=null)
+            {
+                _students.Remove(student);
+            }
+            return student;
+        }
+        public Student Update(Student updateStudent)
+        {
+            Student student = _students.FirstOrDefault(s => s.Id == updateStudent.Id);
+            if (student != null)
+            {
+                student.Name = updateStudent.Name;
+                student.Email = updateStudent.Email;
+                student.ClassName = updateStudent.ClassName;
+            }
+            return student;
+        }
     }
 }

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspStudyDemo01
 {
@@ -24,9 +25,14 @@ namespace AspStudyDemo01
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContextPool<AppDbContext>(
+                options=>options.UseMySql(_configuration.GetConnectionString("StudentDBConnection"))
+                );
             services.AddMvc(option => option.EnableEndpointRouting = false).AddXmlSerializerFormatters();
             //依赖注入
-            services.AddSingleton<IStudentRepository,MockStudentRepository>();
+            //services.AddSingleton<IStudentRepository,MockStudentRepository>();
+
+            services.AddScoped<IStudentRepository, SQLStudentRepository>();//AddScoped保证不同请求过来的时候，产生的实例都是新的
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
