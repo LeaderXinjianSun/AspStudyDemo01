@@ -42,6 +42,10 @@ namespace AspStudyDemo01
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseStatusCodePagesWithRedirects("/Error/{0}");
+            }
 
             //app.UseRouting();
             app.UseStaticFiles();
