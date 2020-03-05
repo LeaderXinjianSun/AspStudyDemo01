@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AspStudyDemo01.Models;
 using AspStudyDemo01.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspStudyDemo01.Controllers
@@ -11,10 +13,12 @@ namespace AspStudyDemo01.Controllers
     public class HomeController : Controller
     {
         private readonly IStudentRepository _studentRepository;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public HomeController(IStudentRepository studentRepository)
+        public HomeController(IStudentRepository studentRepository, IWebHostEnvironment webHostEnvironment)
         {
             _studentRepository = studentRepository;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -53,12 +57,31 @@ namespace AspStudyDemo01.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Student student)
+        public IActionResult Create(StudentCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
-                Student newStudent = _studentRepository.Add(student);
-                return RedirectToAction("Details", new { id = newStudent.Id });
+                string uniqueFileName = null;
+                if (model.Photo != null)
+                {
+                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
+                    string filePath = Path.Combine(uploadsFolder,uniqueFileName);
+                    var filestream = new FileStream(filePath, FileMode.Create);
+                    filestream.Position = 0;
+                    model.Photo.CopyTo(filestream);
+
+                    Student newStudent = new Student { 
+                        Name = model.Name,
+                        Email = model.Email,
+                        ClassName = model.ClassName,
+                        PhotoPath = uniqueFileName
+                    };
+                    _studentRepository.Add(newStudent);
+                    return RedirectToAction("Details", new { id = newStudent.Id });
+                }
+                //Student newStudent = _studentRepository.Add(student);
+                
             }
 
             return View();
