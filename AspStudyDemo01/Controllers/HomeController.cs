@@ -115,7 +115,7 @@ namespace AspStudyDemo01.Controllers
                 {
                     if (model.ExistingPhotoPath != null)
                     {
-                        string filePath = Path.Combine(_webHostEnvironment.ContentRootPath,"images",model.ExistingPhotoPath);
+                        string filePath = Path.Combine(_webHostEnvironment.WebRootPath, "images",model.ExistingPhotoPath);
                         System.IO.File.Delete(filePath);
                     }
                     student.PhotoPath = ProcessUploadedFile(model);
