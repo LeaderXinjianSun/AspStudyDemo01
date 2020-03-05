@@ -34,7 +34,7 @@ namespace AspStudyDemo01.Controllers
 
             return View(homeDetailsViewModel);
         }
-        public IActionResult Details(int? id)
+        public IActionResult Details(int id)
         {
             //return Json(new { id="1", name="张三"});
             //Student model = _studentRepository.GetStudent(1);
@@ -43,9 +43,17 @@ namespace AspStudyDemo01.Controllers
             //ViewData["Student"] = model;
 
             //实例化HomeDetailsViewModel并存储Student详细信息和PageTitle
+
+            Student student = _studentRepository.GetStudent(id);
+            if (student == null)
+            {
+                Response.StatusCode = 404;
+                return View("StudentNotFound", id);
+            }
+
             HomeDetailsViewModel homeDetailsViewModel = new HomeDetailsViewModel()
             {
-                Student = _studentRepository.GetStudent(id ?? 1),
+                Student = student,
                 PageTitle = "学生详细信息"
             };
 
